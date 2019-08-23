@@ -69,7 +69,7 @@ def get_args_parser():
 
     group2.add_argument('-batch_size', type=int,
                         # default=1,
-                        default=32,
+                        default=64,
                         help='Total batch size for training, eval and predict.')
 
     group2.add_argument('-learning_rate', type=float,
@@ -106,11 +106,11 @@ def get_args_parser():
                         help='which rnn cell used.')
 
     group2.add_argument('-save_checkpoints_steps', type=int,
-                        default=50,
+                        default=1000,
                         help='save_checkpoints_steps')
 
     group2.add_argument('-save_summary_steps', type=int,
-                        default=5,
+                        default=1000,
                         help='save_summary_steps.')
 
     group2.add_argument('-filter_adam_var', type=bool,
