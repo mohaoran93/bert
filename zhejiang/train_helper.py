@@ -69,7 +69,7 @@ def get_args_parser():
 
     group2.add_argument('-batch_size', type=int,
                         # default=1,
-                        default=64,
+                        default=18,
                         help='Total batch size for training, eval and predict.')
 
     group2.add_argument('-learning_rate', type=float,
