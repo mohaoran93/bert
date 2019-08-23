@@ -94,7 +94,7 @@ def get_args_parser():
                              'E.g., 0.1 = 10% of training.')
 
     group2.add_argument('-lstm_size', type=int,
-                        default=None,
+                        default=128,
                         help='size of lstm units.')
 
     group2.add_argument('-num_layers', type=int,
@@ -106,11 +106,11 @@ def get_args_parser():
                         help='which rnn cell used.')
 
     group2.add_argument('-save_checkpoints_steps', type=int,
-                        default=1000,
+                        default=500,
                         help='save_checkpoints_steps')
 
     group2.add_argument('-save_summary_steps', type=int,
-                        default=1000,
+                        default=500,
                         help='save_summary_steps.')
 
     group2.add_argument('-filter_adam_var', type=bool,
