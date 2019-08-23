@@ -7,7 +7,7 @@
 
 import tensorflow as tf
 from modeling import BertModel
-from layers import BLSTM_CRF
+from zhejiang.layers import BLSTM_CRF
 from tensorflow.contrib.layers.python.layers import initializers
 
 
