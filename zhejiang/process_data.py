@@ -385,6 +385,7 @@ def count_predcited_aspect_opinion():
 
 
 def parse_ner_predict(predicted_file, category_ids_file):
+    pol_ver_dic = {"PP":"正面","PN":"负面","PU":"中性"}
     category_ids = {}
     for k, v in pd.read_csv(open(category_ids_file)).values:
         category_ids[v] = k
@@ -453,32 +454,36 @@ def parse_ner_predict(predicted_file, category_ids_file):
                 category = category_ids.get(int(info[1]))
                 # logger.info(category)
                 # logger.info(info)
+                if info[0] == "ot":
+                    polarity = pol_ver_dic[str(info[-1])]
                 if info[0] == "at":
                     aspect = word
                     # aspect
-                    opinion = None
+                    opinion = "_"
                     if index > 0:
                         # 向前寻找修饰的情感词汇
                         former_word, former_info = word_info_pairs[index - 1]
-                        if former_info[0] == "ot" and former_info[-1] == "b":
+                        if former_info[0] == "ot" and former_info[-2] == "b":
                             opinion = former_word
                     if not opinion and index < (len(word_info_pairs) - 1):
                         # 向后寻找修饰词汇
                         next_word, next_info = word_info_pairs[index + 1]
-                        if next_info[0] == "ot" and next_info[-1] == "f":
+                        if next_info[0] == "ot" and next_info[-2] == "f":
                             opinion = next_word
-                    row = [id, review, aspect, opinion, None, category, item]
+                    row = [id, aspect, opinion, category, polarity]
                     ner_tokens_res.append(row)
 
-                if info[0] == "ot" and info[-1] == "m":
+                if info[0] == "ot" and info[-2] == "m":
                     opinion = word
-                    row = [id, review, None, opinion, None, category, item]
+                    row = [id, "_", opinion, category, polarity]
                     ner_tokens_res.append(row)
+
             res.extend(ner_tokens_res)
             # break
         df = pd.DataFrame(data=res,
-                          columns=["ID", "Review", "AspectTerms", "Opinions", "Polarities", "Categories", "Ner"])
-        df.to_excel("./data/data_ner/ner_res.xlsx", index=False)
+                          columns=["ID", "AspectTerms", "Opinions", "Categories","Polarities"])
+        # df.to_excel("./data_ner/ner_res.xlsx", index=False)
+        df.to_csv("./data_ner/Result.csv",index=False,header=False,encoding="utf-8")
 
 
 if __name__ == '__main__':
@@ -501,6 +506,6 @@ if __name__ == '__main__':
     # count_predcited_aspect_opinion()
     # count_category(file_labels)
     # data_for_squence2(file_reviews, file_labels)
-    file_predict = r"D:\projects_py\bert\zhejiang\data_ner\label_test.txt"
-    file_category_ids = r"D:\projects_py\bert\zhejiang\data_ner\category_ids.csv"
+    file_predict = r"/Users/mo/Documents/github_projects/zhijiang/bert/zhejiang/data_ner/label_test_0824.txt"
+    file_category_ids = r"/Users/mo/Documents/github_projects/zhijiang/bert/zhejiang/data_ner/category_ids.csv"
     parse_ner_predict(file_predict, file_category_ids)
